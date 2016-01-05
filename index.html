@@ -48,13 +48,13 @@
         this.text3.scale.set(1.5,1.5,1.5)
         this.scene.add(this.text3)
 
-        // var i = 0
-        // setInterval(() => {
-        //   this.text.text = "CENTER" + i
-        //   this.text2.text = "LEFT" + i
-        //   this.text3.text = "RIGHT" + i
-        //   i++
-        // }, 1000)
+        var that = this, i = 0
+        setInterval(function() {
+          that.text.text = "CENTER" + i
+          that.text2.text = "LEFT" + i
+          that.text3.text = "RIGHT" + i
+          i++
+        }, 1000)
 
         window.addEventListener('resize', this.onResize.bind(this))
       }

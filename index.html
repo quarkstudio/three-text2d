@@ -50,11 +50,11 @@
 
         var that = this, i = 0
         setInterval(function() {
-          that.text.text = "CENTER" + i
-          that.text2.text = "LEFT" + i
-          that.text3.text = "RIGHT" + i
+          that.text.text = "CENTER " + i
+          that.text2.text = "LEFT " + i
+          that.text3.text = "RIGHT " + i
           i++
-        }, 1000)
+        }, 100)
 
         window.addEventListener('resize', this.onResize.bind(this))
       }

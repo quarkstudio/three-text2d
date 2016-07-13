@@ -1,44 +1,50 @@
 const THREE = require('three');
 
-var fontHeightCache = {}
+var fontHeightCache = {};
 
 class CanvasText {
 
-  constructor () {
-    this.textWidth = null
-    this.textHeight = null
+  constructor() {
+    this.textWidth = null;
+    this.textHeight = null;
 
-    this.canvas = document.createElement('canvas')
-    this.ctx = this.canvas.getContext('2d')
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
   }
 
-  get width () { return this.canvas.width }
-  get height () { return this.canvas.height }
+  get width() { return this.canvas.width; }
+  get height() { return this.canvas.height; }
 
-  drawText (text, ctxOptions) {
+  drawText(text, ctxOptions) {
+    console.log('options', ctxOptions);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = ctxOptions.font
+    this.ctx.font = ctxOptions.font;
 
-    this.textWidth = Math.ceil(this.ctx.measureText(text).width)
-    this.textHeight = getFontHeight(this.ctx.font)
+    this.textWidth = Math.ceil(this.ctx.measureText(text).width);
+    this.textHeight = getFontHeight(this.ctx.font);
 
-    this.canvas.width = THREE.Math.nextPowerOfTwo(this.textWidth)
-    this.canvas.height = THREE.Math.nextPowerOfTwo(this.textHeight)
+    this.canvas.width = THREE.Math.nextPowerOfTwo(this.textWidth + ctxOptions.paddingX);
+    this.canvas.height = THREE.Math.nextPowerOfTwo(this.textHeight);
 
-    this.ctx.font = ctxOptions.font
-    this.ctx.fillStyle = ctxOptions.fillStyle
+    if (ctxOptions.backgroundColor) {
+      this.ctx.fillStyle = ctxOptions.backgroundColor;
+      this.ctx.fillRect(0, 0, this.textWidth + (ctxOptions.paddingX * 2), this.textHeight);
+    }
+
+    this.ctx.font = ctxOptions.font;
+    this.ctx.fillStyle = ctxOptions.fillStyle;
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'top';
 
-    this.ctx.fillText(text, 0, 0);
+    this.ctx.fillText(text, ctxOptions.paddingX, 0);
 
-    return this.canvas
+    return this.canvas;
   }
 
 }
 
-function getFontHeight (fontStyle) {
+function getFontHeight(fontStyle) {
   var result = fontHeightCache[fontStyle];
 
   if (!result)
@@ -59,4 +65,4 @@ function getFontHeight (fontStyle) {
   return result;
 }
 
-module.exports = CanvasText
+module.exports = CanvasText;

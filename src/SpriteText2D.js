@@ -1,7 +1,7 @@
 const THREE = require('three');
 
 var textAlign = require('./textAlign')
-  , CanvasText = require('./CanvasText')
+  , CanvasText = require('./CanvasText');
 
 class SpriteText2D extends THREE.Object3D {
 
@@ -10,24 +10,26 @@ class SpriteText2D extends THREE.Object3D {
 
     this._font = options.font || '30px Arial';
     this._fillStyle = options.fillStyle || '#FFFFFF';
+    this._backgroundColor = options.backgroundColor || null;
+    this._paddingX = options.paddingX || null;
 
-    this.canvas = new CanvasText()
+    this.canvas = new CanvasText();
 
-    this.align = options.align || textAlign.center
+    this.align = options.align || textAlign.center;
 
     // this._textAlign = options.align || "center"
     // this.anchor = Label.fontAlignAnchor[ this._textAlign ]
-    this.antialias = typeof(options.antialias==="undefined") ? true : options.antialias
+    this.antialias = typeof(options.antialias === 'undefined') ? true : options.antialias;
     this.text = text;
   }
 
   // delegate raycast method to mesh instance
-  raycast () {
-    return this.sprite.raycast.apply(this.sprite, arguments)
+  raycast() {
+    return this.sprite.raycast.apply(this.sprite, arguments);
   }
 
-  get width () { return this.canvas.textWidth }
-  get height () { return this.canvas.textHeight }
+  get width() { return this.canvas.textWidth; }
+  get height() { return this.canvas.textHeight; }
 
   get text() {
     return this._text;
@@ -65,48 +67,49 @@ class SpriteText2D extends THREE.Object3D {
   updateText() {
     this.canvas.drawText(this._text, {
       font: this._font,
-      fillStyle: this._fillStyle
-    })
+      fillStyle: this._fillStyle,
+      backgroundColor: this._backgroundColor,
+      paddingX: this._paddingX
+    });
 
     // cleanup previous texture
-    this.cleanUp()
+    this.cleanUp();
 
     this.texture = new THREE.Texture(this.canvas.canvas);
     this.texture.needsUpdate = true;
-    this.applyAntiAlias()
+    this.applyAntiAlias();
 
     if (!this.material) {
       this.material = new THREE.SpriteMaterial({ map: this.texture });
-
     } else {
-      this.material.map = this.texture
+      this.material.map = this.texture;
     }
 
     if (!this.sprite) {
-      this.sprite = new THREE.Sprite( this.material )
-      this.geometry = this.sprite.geometry
-      this.add(this.sprite)
+      this.sprite = new THREE.Sprite( this.material );
+      this.geometry = this.sprite.geometry;
+      this.add(this.sprite);
     }
 
-    this.sprite.scale.set(this.canvas.width, this.canvas.height, 1)
+    this.sprite.scale.set(this.canvas.width, this.canvas.height, 1);
 
-    this.sprite.position.x = ((this.canvas.width/2) - (this.canvas.textWidth/2)) + ((this.canvas.textWidth/2) * this.align.x)
-    this.sprite.position.y = (- this.canvas.height/2) + ((this.canvas.textHeight/2) * this.align.y)
+    this.sprite.position.x = ((this.canvas.width / 2) - (this.canvas.textWidth / 2)) + ((this.canvas.textWidth / 2) * this.align.x);
+    this.sprite.position.y = (- this.canvas.height / 2) + ((this.canvas.textHeight / 2) * this.align.y);
   }
 
-  cleanUp () {
+  cleanUp() {
     if (this.texture) {
-      this.texture.dispose()
+      this.texture.dispose();
     }
   }
 
-  applyAntiAlias () {
+  applyAntiAlias() {
     if (this.antialias === false) {
-      this.texture.magFilter = THREE.NearestFilter
-      this.texture.minFilter = THREE.LinearMipMapLinearFilter
+      this.texture.magFilter = THREE.NearestFilter;
+      this.texture.minFilter = THREE.LinearMipMapLinearFilter;
     }
   }
 
 }
 
-module.exports = SpriteText2D
+module.exports = SpriteText2D;

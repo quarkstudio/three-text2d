@@ -5,7 +5,7 @@ var textAlign = require('./textAlign')
 
 class SpriteText2D extends THREE.Object3D {
 
-  constructor(text = '', options = {}) {
+  constructor() {
     super();
 
     this._font = options.font || '30px Arial';

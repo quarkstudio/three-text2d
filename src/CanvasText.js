@@ -16,7 +16,6 @@ class CanvasText {
   get height() { return this.canvas.height; }
 
   drawText(text, ctxOptions) {
-    console.log('options', ctxOptions);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.font = ctxOptions.font;

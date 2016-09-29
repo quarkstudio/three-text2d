@@ -16,19 +16,23 @@ class CanvasText {
   get height() { return this.canvas.height; }
 
   drawText(text, ctxOptions) {
+    let lines = text.split(/\r\n|\r|\n/);
+    let nbLines = lines.length;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.font = ctxOptions.font;
 
-    this.textWidth = Math.ceil(this.ctx.measureText(text).width);
+    for (let line of lines) {
+      this.textWidth = Math.max(this.textWidth, Math.ceil(this.ctx.measureText(line).width));
+    }
     this.textHeight = getFontHeight(this.ctx.font);
 
-    this.canvas.width = THREE.Math.nextPowerOfTwo(this.textWidth + ctxOptions.paddingX);
-    this.canvas.height = THREE.Math.nextPowerOfTwo(this.textHeight);
+    this.canvas.width = THREE.Math.nextPowerOfTwo(this.textWidth + (ctxOptions.paddingX * 2));
+    this.canvas.height = THREE.Math.nextPowerOfTwo(this.textHeight * nbLines);
 
     if (ctxOptions.backgroundColor) {
       this.ctx.fillStyle = ctxOptions.backgroundColor;
-      this.ctx.fillRect(0, 0, this.textWidth + (ctxOptions.paddingX * 2), this.textHeight);
+      this.ctx.fillRect(0, 0, this.textWidth + (ctxOptions.paddingX * 2), this.textHeight * nbLines);
     }
 
     this.ctx.font = ctxOptions.font;
@@ -36,7 +40,11 @@ class CanvasText {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'top';
 
-    this.ctx.fillText(text, ctxOptions.paddingX, 0);
+    let currentTop = 0;
+    for (let line of lines) {
+      this.ctx.fillText(line, ctxOptions.paddingX, currentTop);
+      currentTop += this.textHeight;
+    }
 
     return this.canvas;
   }

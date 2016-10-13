@@ -10,6 +10,8 @@ class Text2D extends THREE.Object3D {
 
     this._font = options.font || '30px Arial';
     this._fillStyle = options.fillStyle || '#FFFFFF';
+    this._paddingX = options.paddingX || 0.0;
+    this._paddingY = options.paddingX || 0.0;
 
     this.canvas = new CanvasText()
 
@@ -68,7 +70,9 @@ class Text2D extends THREE.Object3D {
 
     this.canvas.drawText(this._text, {
       font: this._font,
-      fillStyle: this._fillStyle
+      fillStyle: this._fillStyle,
+      paddingX: this._paddingX,
+      paddingY: this._paddingY
     })
 
     this.texture = new THREE.Texture(this.canvas.canvas);
